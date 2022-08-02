@@ -1,0 +1,207 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct linkedlist
+{
+   int data;
+   struct linkedlist* link;
+}node;
+void insert(node** href,int n)
+{
+    node* new_node=(node*)malloc(sizeof(node));
+    new_node->data=n;
+    new_node->link=NULL;
+    if(*href==NULL)
+    {
+        *href=new_node;
+    }
+    else{
+        node* hr;
+        hr=*href;
+        while(hr->link!=NULL)
+        {
+            hr=hr->link;
+        }
+        hr->link=new_node;
+    }
+}
+void insert_at_begining(node** href,int n)
+{
+    node* new_node=(node*)malloc(sizeof(node));
+    new_node->data=n;
+    if(*href==NULL)
+    {
+        *href=new_node;
+        new_node->link=NULL;
+    }
+    else{
+        new_node->link=*href;
+        *href=new_node;
+    }
+
+}
+void insert_at_pos(node** href,int n,int pos)
+{
+    node* new_node=(node*)malloc(sizeof(node));
+    new_node->data=n;
+   int count=1;
+    node* hr=*href;
+    while(hr->link!=NULL && count<pos-1)
+    {
+      hr=hr->link;
+      count++;
+    }
+    new_node->link=hr->link;
+    hr->link=new_node;
+
+}
+void delete_at_pos(node** href,int pos)
+{
+    
+   int count=1;
+    node* hr=*href;
+    while(hr->link!=NULL && count<pos-1)
+    {
+      hr=hr->link;
+     count++;
+    }
+    node* temp;
+    temp=hr->link;
+    hr->link=hr->link->link;
+    free(temp);
+}
+void linsearch(node* href,int item)
+{
+    node* hr=href;
+    int count=1,flag=0;
+    while(hr!=NULL)
+    {
+       if(hr->data==item)
+       {
+         flag=1;
+         printf("Item found at pos:%d\n",count);
+       }
+       count++;
+       hr=hr->link;
+    }
+    if(flag==0)
+    {
+        printf("Item not foundxd\n");
+    }
+}
+void display(node*href)
+{
+    node* h;
+    h=href;
+    while(h!=NULL)
+    {
+        printf("%d\t",h->data);
+        h=h->link;
+    }
+    printf("\n");
+}
+void deletion_at_begining(node** href)
+{
+    node* hr;
+    hr= *href;
+    (*href)=(*href)->link;
+    free(hr);
+
+}
+void deletion_at_end(node** href)
+{
+    node* temp;
+    temp=*href;
+    while(temp->link->link!=NULL)
+    {
+        temp=temp->link;
+    }
+    free(temp->link);
+    temp->link=NULL;
+}
+int main()
+{
+    int n;
+     node* head=NULL;
+    printf("Enter the size of linked list\n");
+    scanf("%d",&n);
+     printf("Enter the elements  of linked list\n");
+    
+   for(int i=1;i<=n;i++)
+   {
+     int d;
+     scanf("%d",&d);
+      insert(&head,d);
+    }
+     display(head);
+
+while (1)
+{
+    printf("Press 1-------> to insert at begining\n");
+    printf("Press 2-------> to insert at a specified index\n");
+    printf("Press 3-------> to delete an element from end\n");
+    printf("Press 4-------> to delete the begining element of the list\n");
+    printf("Press 5-------> to delete at a position\n");
+      printf("Press 6-------> to exit from menu\n");
+      printf("Press 7-------->to prform linear search\n");
+    int ch,pos,d;
+    scanf("%d",&ch);
+    switch(ch)
+    {
+        case 1:printf("Enter value to insert at begining\n");
+               scanf("%d",&d);
+               insert_at_begining(&head,d);
+                display(head);
+               break;
+        case 2:printf("Enter position\n");
+        
+               scanf("%d",&pos);
+               printf("Enter value\n") ;
+               scanf("%d",&d);
+               if(pos==1)
+               {
+                 insert_at_begining(&head,d);
+               }
+           else{
+                insert_at_pos(&head,d,pos);
+               }
+               display(head);
+               break;
+         case 3:printf("deleting element from end\n");
+                deletion_at_end(&head);
+                printf("Linked list:::::::\n");
+                display(head);
+              
+               break;
+          case 4:printf("deleting element from begining \n");
+                deletion_at_begining(&head);
+                printf("Linked list:::::::\n");
+                display(head);
+              
+               break;
+          case 5: printf("Enter position\n");
+        
+               scanf("%d",&pos);
+               
+               if(pos==1)
+               {
+                 deletion_at_begining(&head);
+               }
+           else{
+                delete_at_pos(&head,pos);
+               }
+               display(head);
+               break;
+         case 6: printf("Exiting :::");
+                  exit(1);
+        case 7:printf("Enter the item\n");
+               int item;
+               scanf("%d",&item);
+               linsearch(head,item);
+               break;
+            default: printf("Wrong input\n");
+               
+    }
+}
+return 0;
+    
+}
