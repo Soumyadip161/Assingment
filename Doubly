@@ -1,0 +1,314 @@
+#include <stdio.h>
+#include <stdlib.h>
+ typedef struct doublynode
+{
+    struct doublynode *prev, *next;
+    int data;
+}dnode;
+
+void insertion(dnode **head,int n)
+{
+    dnode* new_node = (dnode *)malloc(sizeof(dnode));
+    new_node->data=n;
+    new_node->prev=NULL;
+    new_node->next=NULL;
+    if(*head == NULL)
+    {
+        
+        *head=new_node;
+    }
+    else{
+        dnode *hr=*head;
+        while (hr->next!=NULL)
+        {
+         hr=hr->next;   
+        }
+        hr->next=new_node;
+        new_node->prev=hr;
+        
+    }
+}
+void insert_after_pos(dnode **head,int pos,int n)
+{
+    dnode *hr=*head;
+    dnode* new_node=(dnode *)malloc(sizeof(dnode));
+    new_node->data=n;
+    int count=1;
+    while(hr->next!=NULL&&count<pos)
+    {
+        hr=hr->next;
+        count++;
+    }
+    if(hr->next==NULL)
+    {
+        insertion(head,n);
+    }
+    else{
+    new_node->next=hr->next;
+    hr->next->prev=new_node;
+    hr->next=new_node;
+    new_node->prev=hr;
+    }
+}
+void insert_before_pos(dnode **head,int pos,int n)
+{
+    dnode *hr=*head;
+    dnode* new_node=(dnode *)malloc(sizeof(dnode));
+    new_node->data=n;
+    int count=1;
+    while(hr->next!=NULL&&count<pos)
+    {
+        hr=hr->next;
+        count++;
+    }
+     new_node->prev=hr->prev;
+     hr->prev->next=new_node;
+    new_node->next=hr;
+    hr->prev=new_node;
+   
+}
+
+void insert_at_begining(dnode ** head,int n)
+{
+    dnode* new_node=(dnode *)malloc((sizeof(dnode)));
+    new_node->data=n;
+    new_node->next=NULL;
+    new_node->prev=NULL;
+    if(*head == NULL)
+    {
+        
+        *head=new_node;
+    }
+    else{
+        new_node->next=*head;
+        (*head)->prev=new_node;
+        *head=new_node;
+    }
+
+}
+void display( dnode* href)
+{
+     dnode* hr=href;
+
+    while(hr!=NULL)
+    {
+        
+        printf("%d\t",hr->data);
+        hr=hr->next;
+    }
+}
+void back_traversal(dnode *head)
+{
+    dnode *hr=head;
+    while(hr->next!=NULL)
+    {
+        hr=hr->next;
+    }
+    while (hr!=NULL)
+    {
+        printf("%d\t",hr->data);
+        hr=hr->prev;
+    }
+    
+}
+void Delete_head(dnode **head)
+{
+    dnode* hr=*head;
+    if(*head==NULL)
+    {
+        printf("you cannot perform deletion in an empty linked list\n");
+    }
+    else{
+        if (hr->next!=NULL)
+        {
+            (*head)=(*head)->next;
+            (*head)->prev=NULL;
+            free(hr);
+        }
+        else{
+            free(*head);
+        }
+        
+      }
+}
+void Delete_last(dnode **head)
+{
+    dnode *hr= *head;
+    while(hr->next->next!=NULL)
+    {
+        hr=hr->next;
+    }
+    if(hr->next!=NULL){
+    dnode *temp;
+    temp=hr->next;
+    hr->next=NULL;
+    free(temp);
+    }
+    else{
+        Delete_head(head);
+    }
+}
+void Delete_at_pos(dnode **head,int pos)
+{
+   int count = 1;
+   dnode *hr=*head;
+   while(count<pos&& hr->next!=NULL)
+   {
+    hr=hr->next;
+    count++;
+   }
+   if(hr->next!=NULL)
+   {
+    hr->prev->next=hr->next;
+    hr->next->prev=hr->prev;
+    free(hr);
+   }
+   else{
+    if(count==pos)
+    {
+        Delete_last(head);
+    }
+   }
+}
+void reverse_doubly(dnode **head)
+{
+    dnode *hr;
+    hr=*head;
+    dnode *temp;
+    while(hr->next!=NULL)
+    {
+        
+        temp->next=hr->next;
+        hr->next=hr->prev;
+        hr->prev=temp->next;
+        hr=temp->next;
+    }
+    temp->next=hr->next;
+    hr->next=hr->prev;
+    hr->prev=temp->next;
+    *head=hr;
+    free(temp);
+}
+int main()
+{
+    dnode* head;
+    head=NULL;
+    int ch,d,pos;
+    while(1)
+    {
+        printf("\npress\n");
+        printf("1--------> to enter an element at end\n");
+        printf("2--------> to enter an element at begining\n");
+        printf("3--------> to enter an element after a position\n");
+         printf("4--------> to insert  an element before a position\n");
+           printf("5--------> to traverse the linked list from backwards\n");
+        printf("6--------> to delete an element at position\n");
+       
+        printf("7--------> to delete the head element\n");
+        printf("8--------> to delete the last element\n");
+        printf("9-------->to reverse the doubly linkedlist\n");
+        printf("10---------> to exit from menu\n");
+        scanf("%d",&ch);
+        
+       switch(ch)
+       {
+          case 1:printf("Enter the element to insert at end\n");
+                 scanf("%d",&d);
+                 insertion(&head,d);
+                 display(head);
+                 break;
+          case 2:printf("Enter the element to insert\n");
+                 scanf("%d",&d);
+                 insert_at_begining(&head,d);
+                 display(head);
+                 break;
+          case 3:printf("Position:");
+                 scanf("%d",&pos);
+                 printf("Enter element:");
+                 scanf("%d",&d);
+                
+                 
+                 if(pos==1||head==NULL)
+                 {
+                    insert_at_begining(&head,d);
+                 }
+                 else{
+                 insert_after_pos(&head,pos,d);}
+                 display(head);
+                 break;
+        case 4:printf("Position:");
+                 scanf("%d",&pos);
+                 printf("Enter element:");
+                 scanf("%d",&d);
+                
+                 
+                 if(pos==1||head==NULL)
+                 {
+                    insert_at_begining(&head,d);
+                 }
+                 else{
+                 insert_before_pos(&head,pos,d);}
+                 display(head);
+                 break;
+        case 5: back_traversal(head);
+                break;
+        case 6: printf("Enter position:");
+                scanf("%d",&pos);
+                printf("\n");
+                if(head==NULL)
+                {
+                    printf("You can not perform deletion on an empty array\n");
+                }
+                else{
+                   if(pos==1)
+                   {
+                    Delete_head(&head);
+                   }
+                   else{
+                    Delete_at_pos(&head,pos);
+                   }
+                }
+                if(head!=NULL)
+               display(head);
+               else
+               printf("Entire list has been deleted\n");
+                break;
+        
+               
+        case 7:printf("Deleting the head element\n");
+               if(head==NULL)
+               {
+                printf("Head is already NULL\n");
+               }
+               else{
+                Delete_head(&head);
+               }
+               if(head!=NULL)
+               display(head);
+               else
+               printf("Entire list has been deleted\n");
+               break;
+        case 8:printf("Deleting the last element\n");
+               if(head==NULL)
+               {
+                printf("Head is already NULL\n");
+               }
+               else{
+                Delete_last(&head);
+               }
+               if(head!=NULL)
+               display(head);
+               else
+               printf("Entire list has been deleted\n");
+               break;
+        case 9: printf("The Linkedlist has been reversed\n");
+                reverse_doubly(&head);
+                display(head);
+                break;
+        case 10:printf("Thanks for using:)");
+                 exit(1);
+          default:printf("Wrong input enter again");
+        }
+    }
+    return 0;
+}
