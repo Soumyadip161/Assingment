@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node
+{
+    int data;
+    struct Node *next;
+} node;
+void insert_at_end(node **head, int n)
+{
+    node *new_node = (node *)malloc(sizeof(node));
+    new_node->data = n;
+    node *hr = *head;
+    if (*head == NULL)
+    {
+        *head = new_node;
+        (*head)->next = *head;
+    }
+    else
+    {
+        while (hr->next != *head)
+        {
+            hr = hr->next;
+        }
+        new_node->next = hr->next;
+        hr->next = new_node;
+    }
+}
+void display(node *head)
+{
+    node *hr;
+    hr = head;
+    while (hr->next!= head)
+    {
+        printf("%d\t", hr->data);
+        hr = hr->next;
+    }
+    printf("%d",hr->data);
+    printf("\n");
+}
+int main()
+{
+    node *head = NULL;
+    insert_at_end(&head, 50);
+    display(head);
+    insert_at_end(&head, 800);
+    display(head);
+    insert_at_end(&head, 90);
+    display(head);
+
+    // traversal(head);
+
+    return 0;
+}
