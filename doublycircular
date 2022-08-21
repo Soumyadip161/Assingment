@@ -1,0 +1,237 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node
+{
+    int data;
+    struct Node *next;
+    struct Node *prev;
+} node;
+void insert_at_end(node **head,node **last, int n)
+{
+    node *new_node = (node *)malloc(sizeof(node));
+    new_node->data = n;
+    
+    if (*head == NULL&&*last==NULL)
+    {
+        *head = new_node;
+        *last = *head;
+        (*head)->next = *last;
+        (*head)->prev=*last;
+       
+    }
+    else
+    {
+       (*last)->next=new_node;
+       new_node->prev=*last;
+       new_node->next=*head;
+       *last=new_node;
+       (*head)->prev=*last;
+    }
+}
+void insert_at_begining(node **head,node **last,int n)
+{
+    node *new_node = (node *)malloc(sizeof(node));
+    new_node->data = n;
+    
+    if (*head == NULL&&last==NULL)
+    {
+       insert_at_end(head,last,n);
+    }
+    else
+    {
+      
+        new_node->next = *head;
+     (*head)->prev = new_node;
+        new_node->prev=*last;
+        (*last)->next=new_node;
+        *head=new_node;
+    }
+}
+void display(node *head)
+{
+    node *hr;
+    hr = head;
+    
+    do{
+        printf("%d\t", hr->data);
+        hr = hr->next;
+    }while(hr!=head);
+     printf("\n");
+}
+void check_circular(node *head)
+{
+   node* hr=head;
+    while (hr->next!=head)
+    {
+         hr=hr->next;
+    }
+   printf("Address of head=%d",head);
+    printf("Next of last:%d data at next of last:%d\n",hr->next,hr->next->data);
+}
+void insert_at_pos(node ** head,node **last,int n,int pos)
+{
+    
+    if(pos==1||*head==NULL)
+    {
+        insert_at_begining(head,last, n);
+    }
+    else{
+        int count = 1;
+        node *hr=*head;
+        while(hr!=*last &&count<pos-1)
+        {
+            hr=hr->next;
+            count ++;
+        }
+        if(hr==*last)
+        {
+            insert_at_end(head,last,n);
+        }
+        
+        else{
+            node *new_node=(node *)malloc(sizeof(node));
+            new_node->data=n;
+            new_node->next=hr->next;
+            new_node->prev=hr;
+            hr->next->prev=new_node;
+            hr->next=new_node;
+
+        }
+    }
+}
+void delete_begining(node **head,node **last)
+{
+    node *hr=*head;
+    if(*head!=NULL){
+    
+    (*head)=(*head)->next;
+    (*head)->prev=*last;
+    (*last)->next=*head;
+    free(hr);
+    }
+}
+void delete_end(node **head,node **last)
+{
+    if(*head!=NULL){
+    node *hr=*last;
+    (*last)=(*last)->prev;
+    (*last)->next=(*head);
+    (*head)->prev=(*last);
+    free(hr);
+    }
+}
+void delete_at_pos(node **head,node **last,int pos)
+{
+   if(pos==1)
+    {
+        delete_begining(head,last);
+    }
+    else{
+        int count = 1;
+        node *hr=*head;
+        while(hr!=*last &&count<pos-1)
+        {
+            hr=hr->next;
+            count ++;
+        }
+        if(hr==*last&&count<pos-1)
+        {
+            return;
+        }
+        else{
+             if(hr->next==*last)
+             {
+                delete_end(head,last);
+             }
+             else{
+                node *temp=hr->next;
+                hr->next=hr->next->next;
+                hr->next->next->prev=hr;
+                free(temp);
+             }
+           
+        }
+    } 
+}
+int main()
+{
+    node* head;
+    node *last;
+    last=NULL;
+    head=NULL;
+    int ch,d,pos;
+    while(1)
+    {
+        printf("\npress\n");
+        printf("1--------> to enter an element at end\n");
+        printf("2--------> to enter an element at begining\n");
+        printf("3--------> to enter an element at position\n");
+        printf("4--------> to delete an element at position\n");
+        printf("5--------> to delete the head element\n");
+        printf("6--------> to delete the last element\n");
+        printf("7---------> to exit from menu\n");
+         printf("8---------> to check circular\n");
+        scanf("%d",&ch);
+        
+       switch(ch)
+       {
+          case 1:printf("Enter the element to insert at end\n");
+                 scanf("%d",&d);
+                 insert_at_end(&head,&last,d);
+                 display(head);
+                 break;
+          case 2:printf("Enter the element to insert\n");
+                 scanf("%d",&d);
+                 insert_at_begining(&head,&last,d);
+                 display(head);
+                 break;
+          case 3:printf("Position:");
+                 scanf("%d",&pos);
+                 printf("Enter element:");
+                 scanf("%d",&d);
+                
+                 insert_at_pos(&head,&last,d,pos);
+                 display(head);
+                 break;
+        case 4: printf("Enter position:");
+                scanf("%d",&pos);
+                printf("\n");
+                if(head==NULL)
+                {
+                    printf("You can not perform deletion on an empty array\n");
+                }
+                  else{
+                    delete_at_pos(&head,&last,pos);
+                   }
+                
+                display(head);
+                break;
+        case 5:printf("Deleting the head element\n");
+               if(head==NULL)
+               {
+                printf("Head is already NULL\n");
+               }
+               else{
+                delete_begining(&head,&last);
+               }
+               display(head);
+               break;
+        case 6:printf("Deleting the last element\n");
+               if(head==NULL)
+               {
+                printf("Head is already NULL\n");
+               }
+               else{
+                delete_end(&head,&last);
+               }
+               display(head);
+               break;
+          case 7:printf("Thanks for using:)");
+                 exit(1);
+        case 8:check_circular(head);
+               break;
+          default:printf("Wrong input enter again");
+        }
+    }
+}
