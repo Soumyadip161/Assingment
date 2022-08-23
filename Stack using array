@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+int *stck;
+int top, max;
+void push(int n)
+{
+    if(top<max-1)
+    {
+        stck[++top]=n;
+    }
+    else{
+        printf("Stack overflow\n");
+    }
+}
+int pop()
+{
+    if(top==-1)
+    {
+        printf("Stack underflow\n");
+        return 0;
+    }
+    else{
+        return stck[top--];
+    }
+}
+int peek()
+{
+    if(top>-1)
+    {
+        return stck[top];
+    }
+    else{
+        printf("No element in the stack\n");
+        return 0;
+    }
+}
+
+int main()
+{
+    top=-1;
+    int ch,n;
+    printf("Enter the maximum capacity of the stack\n");
+    scanf("%d",&max);
+    stck = (int *)malloc(sizeof(int)*max);
+    
+    while (1)
+    {
+    printf("Press 1------>to push\n");
+    printf("Press 2------>to pop\n");
+    printf("Press 3------>to peek\n");
+    printf("Press -1------>to exit menu\n");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1: printf("Enter the element to push\n");
+                    scanf("%d",&n);
+                    push(n);
+                    break;
+            case 2: printf("Element:%d\n",pop());
+                    break;
+            case 3: printf("Element at top:%d\n",peek());
+                    break;
+            case -1: exit(1);
+        }
+    }
+    return 0;
+    
+}
