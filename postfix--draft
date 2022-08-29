@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+char *stck;
+int top, max;
+void push(char n)
+{
+    if(top<max-1)
+    {
+        stck[++top]=n;
+    }
+    else{
+        printf("Stack overflow\n");
+    }
+}
+char pop()
+{
+    if(top==-1)
+    {
+        printf("Stack underflow\n");
+        return 0;
+    }
+    else{
+        return stck[top--];
+    }
+}
+int getprecedence(char ch)
+{
+    int pre;
+    switch(ch)
+    {
+        case '^': pre=5;
+                  break;
+        case '*': 
+        case '/': pre=4;
+                 break;
+        case '+':
+        case '-': pre=3;
+                 break;
+        
+    }
+    return pre;
+}
+int main()
+{
+    max=100;
+    stck= (char *)malloc(sizeof(char)*100);
+    char str[25];
+    char *ch;
+    printf("Enter the string which in no case be greater than 25\n");
+    scanf("%s",str);
+    ch=str;
+    while(*ch!='\0')
+    {
+       if(*ch=='^'||*ch=='*'||*ch=='/'||*ch=='+'||*ch=='-')
+       {
+        if(getprecedence(*ch)>getprecedence(stck[top]))
+        {
+            push(*ch);
+        }
+        else{
+            printf("%c",pop());
+            push(*ch);
+        }
+       }
+       else if(((int)*ch>64&&(int)*ch<91)||((int)*ch>96&&(int)*ch<123))
+       {
+        printf("%c",*ch);
+       }
+       ch++;
+       
+    }
+    while(top>=0)
+    {
+        printf("%c",pop());
+    }
+   return 0;
+}
