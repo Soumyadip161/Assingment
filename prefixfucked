@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct stack{
+    char data;
+    struct stack *next;
+}stack;
+stack *top=NULL;
+int max=100;
+int size=0;
+void push(char n)
+{
+    stack *new_node=(stack *)malloc(sizeof(stack));
+    if(size<max){
+    new_node->data=n;
+    if(top == NULL)
+    {
+       top=new_node;
+       new_node->next=NULL;
+    }
+    else{
+        new_node->next=top;
+        top=new_node;
+    }
+    size++;
+    }
+    else{
+        printf("Stack Overflow\n");
+    }
+}
+char pop()
+{
+    stack *hr;
+    if (size>0)
+    {
+         hr=top;
+    int d=top->data;
+    top=top->next;
+    free(hr);
+    size--;
+    return d;
+
+    }
+    else 
+    {
+        printf("Stack UnderFlow\n");
+        return '\0';
+    }
+}
+int getprecedence(char ch)
+{
+    int pre;
+    switch(ch)
+    {
+        case '^': pre=5;
+                  break;
+        case '*': 
+        case '/': pre=4;
+                 break;
+        case '+':
+        case '-': pre=3;
+                 break;
+        
+    }
+    return pre;
+}
+void reverse(char *src)
+{
+ int i,l;
+ char tmp;
+ l=strlen(src);
+ for(i=0;i<l/2;i++)
+ {
+    tmp=src[i];
+    src[i]=src[l-i-1];
+    src[l-i-1]=tmp;
+ }
+}
+int main()
+{
+    char str[25];
+    char str_new[25];
+    char *ch;
+    int l,n=0;
+    printf("Enter the string which in no case be greater than 25\n");
+    scanf("%s",str);
+    reverse(str);
+    ch=str;
+    while(*ch!='\0')
+    {
+       if(*ch=='^'||*ch=='*'||*ch=='/'||*ch=='+'||*ch=='-')
+       {
+        if(top==NULL)
+        {
+            push(*ch);
+        }
+        if(getprecedence(*ch)>getprecedence(top->data))
+        {
+            push(*ch);
+        }
+        else{
+            str_new[n]=pop();
+            n++;
+            push(*ch);
+        }
+       }
+       else if(((int)*ch>64&&(int)*ch<91)||((int)*ch>96&&(int)*ch<123))
+       {
+        str_new[n]=*ch;
+        n++;
+       }
+       ch++;
+       
+    }
+    while(size>0)
+    {
+        str_new[n]=pop();
+        n++;
+    }
+    str_new[n]='\0';
+    reverse(str_new);
+
+    printf("%s",str_new);
+    printf("\n");
+   return 0;
+}
