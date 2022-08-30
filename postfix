@@ -43,6 +43,7 @@ int getprecedence(char ch)
 int main()
 {
     max=100;
+    int c=0;
     stck= (char *)malloc(sizeof(char)*100);
     char str[25];
     char *ch;
@@ -53,6 +54,7 @@ int main()
     {
        if(*ch=='^'||*ch=='*'||*ch=='/'||*ch=='+'||*ch=='-')
        {
+        if(stck[top]!='('){
         if(getprecedence(*ch)>getprecedence(stck[top]))
         {
             push(*ch);
@@ -61,10 +63,31 @@ int main()
             printf("%c",pop());
             push(*ch);
         }
+        }
+        else{
+            push(*ch);
+        }
+       }
+       else if(*ch=='(')
+       {
+        push(*ch);
+        c++;
        }
        else if(((int)*ch>64&&(int)*ch<91)||((int)*ch>96&&(int)*ch<123))
        {
         printf("%c",*ch);
+       }
+       else if(*ch==')')
+       {
+        if(c!=0){
+        while (stck[top]!='(')
+        {
+            printf("%c",pop());
+        }
+        pop();
+        c--;
+        }
+        
        }
        ch++;
        
@@ -73,5 +96,6 @@ int main()
     {
         printf("%c",pop());
     }
+    printf("\n");
    return 0;
 }
