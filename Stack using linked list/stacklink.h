@@ -27,6 +27,32 @@ void push(int n)
         printf("Stack Overflow\n");
     }
 }
+int pop()
+{
+    stack *hr;
+    int d;
+    if (size>0)
+    {
+         hr=top;
+    d=top->data;
+    top=top->next;
+    free(hr);
+    size--;
+    if(size==0){
+        top==NULL;
+    }
+    
+
+    }
+    else 
+    {
+        
+        printf("Stack UnderFlow\n");
+        return -18999905;
+    }
+    return d;
+}
+
 
 void peek()
 {
