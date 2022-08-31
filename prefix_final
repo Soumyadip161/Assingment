@@ -31,21 +31,27 @@ void push(char n)
 char pop()
 {
     stack *hr;
+    int d;
     if (size>0)
     {
          hr=top;
-    int d=top->data;
+    d=top->data;
     top=top->next;
     free(hr);
     size--;
-    return d;
+    if(size==0){
+        top==NULL;
+    }
+    
 
     }
     else 
     {
+        
         printf("Stack UnderFlow\n");
         return '\0';
     }
+    return d;
 }
 int getprecedence(char ch)
 {
@@ -85,6 +91,7 @@ int main()
     printf("Enter the string which in no case be greater than 25\n");
     scanf("%s",str);
     reverse(str);
+    printf("%s\n",str);
     ch=str;
     while(*ch!='\0')
     {
@@ -94,14 +101,19 @@ int main()
         {
             push(*ch);
         }
-        if(getprecedence(*ch)>getprecedence(top->data))
+        else{
+        if(getprecedence(*ch)>=getprecedence(top->data))
         {
             push(*ch);
         }
         else{
-            str_new[n]=pop();
+               
+            while(top!=NULL &&getprecedence(*ch)<getprecedence(top->data)){
+              str_new[n]=pop();
             n++;
+            }
             push(*ch);
+        }
         }
        }
        else if(((int)*ch>64&&(int)*ch<91)||((int)*ch>96&&(int)*ch<123))
@@ -118,9 +130,10 @@ int main()
         n++;
     }
     str_new[n]='\0';
+    printf("%s\n",str_new);
     reverse(str_new);
 
-    printf("%s",str_new);
+    printf("%s\n",str_new);
     printf("\n");
    return 0;
 }
