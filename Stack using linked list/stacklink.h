@@ -27,25 +27,7 @@ void push(int n)
         printf("Stack Overflow\n");
     }
 }
-int pop()
-{
-    stack *hr;
-    if (size>0)
-    {
-         hr=top;
-    int d=top->data;
-    top=top->next;
-    free(hr);
-    size--;
-    return d;
 
-    }
-    else 
-    {
-        printf("Stack UnderFlow\n");
-        return -18999;
-    }
-}
 void peek()
 {
   if (size>0)
