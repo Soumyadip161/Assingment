@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct node{
+    int data;
+    struct node* next;
+}node;
+node *front=NULL;
+node *rear=NULL;
+int size,currnodes=0;
+void Enqueue(int n)
+{
+    if(currnodes<size)
+    {
+        node *new_node=(node *)malloc(sizeof(node));
+        new_node->data=n;
+        new_node->next=NULL;
+        if(front==NULL && rear==NULL)
+        {
+            front=rear=new_node;
+            
+            
+        }
+        else{
+           (rear)->next=new_node;
+           rear=new_node;
+        }
+        currnodes++;
+    }
+    else{
+        printf("Queue is full\n");
+    }
+}
+int Dequeue()
+{
+    if(currnodes>0)
+    {
+        if(front==rear)
+        {
+            int y= (front)->data;
+            node *tmp= front;
+            front=rear=NULL;
+            currnodes--;
+            free(tmp);
+            return y;
+        }
+        else
+        {
+            node *tmp = front;
+            int y = tmp->data;
+            front=(front)->next;
+            currnodes--;
+            free(tmp);
+            return y;
+        }
+    }
+    else
+    {
+         printf("The queue is empty\n");
+         return -19999999;
+    }
+}
+void display()
+{
+    node *hr=front;
+    while(hr!=NULL)
+    {
+        printf("%d\n",hr->data);
+        hr=hr->next;
+    }
+}
+int main()
+{
+    int ch,d;
+    printf("Enter the size of the Queue\n");
+    scanf("%d",&size);
+        while(1)
+    {
+        printf("Enter 1------> to enqueue\n");
+        printf("Enter 2------> to dequeue\n");
+        printf("Enter 3------> to display\n");
+        printf(" Enter -1-----> to exit\n");
+        scanf("%d",&ch);
+        switch (ch)
+        {
+        case 1: printf("Enter the element to insert\n");
+                scanf("%d",&d);
+                Enqueue(d);
+            break;
+        case 2: printf("the element dequeued is %d",Dequeue());
+                break;
+          case 3: printf("The Queue stands as follows:\n");
+                display();
+                break;      
+        case -1: exit(1);
+        
+        default: printf("wrong choice\n");
+            break;
+        }
+    }
+    return 0;
+}
+    
+
