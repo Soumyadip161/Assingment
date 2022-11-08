@@ -36,7 +36,7 @@ void preorder(node *root)
     preorder(root->left);
     preorder(root->right);
 }
-int getRightmin(node *root)
+int getmin(node *root)
 {
     node* tmp=root;
     while (tmp->left!=NULL)
@@ -79,7 +79,7 @@ node *delete_node(node *root,int val)
         }
         else 
         {
-            int rightmin=getRightmin(root);
+            int rightmin=getmin(root->right);
             root->data=rightmin;
             root->right=delete_node(root->right,rightmin);
         }
